@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpooling.UI", "Carpooling.UI\Carpooling.UI.csproj", "{360F4E91-212D-4CA6-B1A6-D0C970316249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpooling.Core", "Carpooling.Core\Carpooling.Core.csproj", "{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{360F4E91-212D-4CA6-B1A6-D0C970316249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{360F4E91-212D-4CA6-B1A6-D0C970316249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{360F4E91-212D-4CA6-B1A6-D0C970316249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{360F4E91-212D-4CA6-B1A6-D0C970316249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC5D342D-5162-4C12-83D4-A524A23B9586}
+	EndGlobalSection
+EndGlobal
