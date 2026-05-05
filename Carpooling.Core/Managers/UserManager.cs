@@ -21,8 +21,8 @@ namespace Carpooling.Core.Managers
         public bool Register(User newUser)
         {
             // Використовуємо валідатор (>= 8 символів)
-            if (!DataValidator.IsValidLogin(newUser.Login) ||
-                !DataValidator.IsValidPassword(newUser.Password))
+            if (!UserValidator.IsValidLogin(newUser.Login) ||
+                !UserValidator.IsValidPassword(newUser.Password))
                 return false;
 
             // Перевіряємо унікальність логіна
