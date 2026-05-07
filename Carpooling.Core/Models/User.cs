@@ -12,7 +12,7 @@
         // Метод-заглушка
         public virtual string GetRoleName()
         {
-            return Role;
+            throw new NotImplementedException();
         }
 
         // Метод для зміни пароля

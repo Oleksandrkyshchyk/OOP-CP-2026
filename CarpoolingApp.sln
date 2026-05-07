@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35806.99 d17.13
+VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpooling.UI", "Carpooling.UI\Carpooling.UI.csproj", "{360F4E91-212D-4CA6-B1A6-D0C970316249}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpooling.Core", "Carpooling.Core\Carpooling.Core.csproj", "{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carpooling.Tests", "Carpooling.Tests\Carpooling.Tests.csproj", "{0973FDC2-5A06-4B37-AE0C-B3B540D7BDCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C47B362-4C09-4A96-8E7C-1FEFB6209A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0973FDC2-5A06-4B37-AE0C-B3B540D7BDCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0973FDC2-5A06-4B37-AE0C-B3B540D7BDCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0973FDC2-5A06-4B37-AE0C-B3B540D7BDCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0973FDC2-5A06-4B37-AE0C-B3B540D7BDCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

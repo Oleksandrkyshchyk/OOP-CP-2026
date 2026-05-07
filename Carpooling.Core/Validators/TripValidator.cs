@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Carpooling.Core.Validators
 {
     public static class TripValidator
     {
-        // Перевірка ціни (не може бути 0 або менше)
+        // Заглушка для перевірки ціни
         public static bool IsValidPrice(decimal price)
         {
-            return price > 0;
+            throw new NotImplementedException();
         }
 
-        // Перевірка кількості місць (від 1 до 50)
+        // Заглушка для перевірки місць
         public static bool IsValidSeats(int seats)
         {
-            return seats >= 1 && seats <= 50;
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,18 +10,28 @@ namespace Carpooling.Core.Models
         public DateTime DepartureTime { get; set; }
         public decimal Price { get; set; }
         public int TotalSeats { get; set; }
-        public string Status { get; set; } = "Активна";
-        public Driver Driver { get; set; }
+        public string Status { get; set; } // Активна, Завершена, Скасована
         public List<Booking> Bookings { get; set; } = new List<Booking>();
 
-        // Подія для сповіщення про зміну статусу (вимога ТЗ)
+        // Подія для SOLID (Events)
         public event Action<string> OnStatusChanged;
 
-        // Реалізація інтерфейсу для сортування за ціною
+        // Метод-заглушка для розрахунку місць
+        public int CalculateFreeSeats()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Метод-заглушка для зміни статусу
+        public bool ChangeStatus(string newStatus)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Заглушка IComparable для сортування
         public int CompareTo(Trip other)
         {
-            if (other == null) return 1;
-            return Price.CompareTo(other.Price);
+            throw new NotImplementedException();
         }
     }
 }
