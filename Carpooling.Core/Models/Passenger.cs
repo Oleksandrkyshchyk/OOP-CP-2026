@@ -7,8 +7,9 @@
 
         public Passenger()
         {
-            Role = "Пасажир";
-            Bookings = new List<Booking>();
+            throw new NotImplementedException();
+            // Role = "Пасажир";
+            // Bookings = new List<Booking>();
         }
     }
 }
