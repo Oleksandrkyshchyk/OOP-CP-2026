@@ -22,29 +22,32 @@ namespace Carpooling.Core.Managers
         public bool CreateTrip(Trip newTrip)
         {
             // Тут ми можемо додати перевірку через TripValidator у майбутньому
-            if (newTrip.DepartureTime < DateTime.Now || newTrip.Price <= 0)
-                return false;
+            //if (newTrip.DepartureTime < DateTime.Now || newTrip.Price <= 0)
+            //    return false;
 
-            _trips.Add(newTrip);
-            _storage.SaveTrips(_trips);
-            return true;
+            //_trips.Add(newTrip);
+            //_storage.SaveTrips(_trips);
+            //return true;
+            throw new NotImplementedException();
         }
 
         // Пошук поїздок за містом прибуття (використання LINQ)
         public List<Trip> SearchTrips(string destination)
         {
-            return _trips
-                .Where(t => t.ArrivalCity.Contains(destination, StringComparison.OrdinalIgnoreCase)
-                            && t.Status == "Активна")
-                .ToList();
+            //return _trips
+            //    .Where(t => t.ArrivalCity.Contains(destination, StringComparison.OrdinalIgnoreCase)
+            //                && t.Status == "Активна")
+            //    .ToList();
+            throw new NotImplementedException();
         }
 
         // Сортування поїздок за ціною (використання IComparable)
         public List<Trip> GetSortedTrips()
         {
-            var sortedList = _trips.ToList();
-            sortedList.Sort(); // Викличе CompareTo в моделі Trip
-            return sortedList;
+            //var sortedList = _trips.ToList();
+            //sortedList.Sort(); // Викличе CompareTo в моделі Trip
+            //return sortedList;
+            throw new NotImplementedException();
         }
 
         public List<Trip> GetAllTrips() => _trips;

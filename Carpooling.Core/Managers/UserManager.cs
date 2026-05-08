@@ -20,26 +20,18 @@ namespace Carpooling.Core.Managers
 
         public bool Register(User newUser)
         {
-            // Використовуємо валідатор (>= 8 символів)
-            if (!UserValidator.IsValidLogin(newUser.Login) ||
-                !UserValidator.IsValidPassword(newUser.Password))
-                return false;
 
-            // Перевіряємо унікальність логіна
-            if (_users.Any(u => u.Login == newUser.Login))
-                return false;
-
-            _users.Add(newUser);
-            _storage.SaveUsers(_users);
-            return true;
+            throw new NotImplementedException();
         }
 
         public User Login(string login, string password)
         {
-            // Пошук користувача за парою логін/пароль
-            return _users.FirstOrDefault(u => u.Login == login && u.Password == password);
+            throw new NotImplementedException();
         }
 
-        public List<User> GetAllUsers() => _users;
+        public List<User> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
