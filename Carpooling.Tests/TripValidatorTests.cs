@@ -64,5 +64,59 @@ namespace Carpooling.Tests
             Assert.IsFalse(resultHigh);
             Assert.IsFalse(resultLow);
         }
+
+        [TestMethod]
+        public void AreCitiesValid_DifferentCities_ReturnsTrue()
+        {
+            // Arrange
+            string dep = "Київ";
+            string arr = "Львів";
+
+            // Act
+            bool result = TripValidator.AreCitiesValid(dep, arr);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AreCitiesValid_SameCities_ReturnsFalse()
+        {
+            // Arrange
+            string dep = "Одеса";
+            string arr = "Одеса";
+
+            // Act
+            bool result = TripValidator.AreCitiesValid(dep, arr);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsDateValid_FutureDate_ReturnsTrue()
+        {
+            // Arrange
+            DateTime futureDate = DateTime.Now.AddDays(1);
+
+            // Act
+            bool result = TripValidator.IsDateValid(futureDate);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsDateValid_PastDate_ReturnsFalse()
+        {
+            // Arrange
+            DateTime pastDate = DateTime.Now.AddDays(-1);
+
+            // Act
+            bool result = TripValidator.IsDateValid(pastDate);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }
