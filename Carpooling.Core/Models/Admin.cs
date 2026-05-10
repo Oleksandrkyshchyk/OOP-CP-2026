@@ -6,9 +6,8 @@
 
         public Admin()
         {
-            throw new NotImplementedException();
-            // Role = "Адміністратор";
-            // AccessLevel = 1;
+            Role = "Адміністратор";
+            AccessLevel = 1;
         }
     }
 }

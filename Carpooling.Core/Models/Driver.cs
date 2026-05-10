@@ -8,9 +8,8 @@
 
         public Driver()
         {
-            throw new NotImplementedException();
-            // Role = "Водій";
-            // OwnTrips = new List<Trip>(); // Ініціалізація колекції
+            Role = "Водій";
+            OwnTrips = new List<Trip>(); // Ініціалізація колекції
         }
     }
 }

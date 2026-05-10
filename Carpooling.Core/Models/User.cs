@@ -1,4 +1,7 @@
-﻿namespace Carpooling.Core.Models
+﻿using System;
+using Carpooling.Core.Validators;
+
+namespace Carpooling.Core.Models
 {
     // Абстрактний клас
     public abstract class User
@@ -9,16 +12,28 @@
         public string Phone { get; set; }
         public string Role { get; set; }
 
-        // Метод-заглушка
+        // Метод для отримання назви ролі
         public virtual string GetRoleName()
         {
-            throw new NotImplementedException();
+            // Повертаємо встановлену роль або "Користувач" за замовчуванням
+            return !string.IsNullOrEmpty(Role) ? Role : "Користувач";
         }
 
         // Метод для зміни пароля
         public virtual bool ChangePassword(string newPassword)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                throw new ArgumentException("Пароль не може бути порожнім");
+            }
+
+            if (UserValidator.IsValidPassword(newPassword))
+            {
+                Password = newPassword;
+                return true;
+            }
+
+            return false;
         }
     }
 }
