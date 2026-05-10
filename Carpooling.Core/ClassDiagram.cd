@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Carpooling.Core.Managers.TripManager">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <AssociationLine Name="_trips" Type="Carpooling.Core.Models.Trip">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="0.493" Y="0.019" Height="0.182" Width="0.635" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAAEAAAAAgAE=</HashCode>
+      <FileName>Managers\TripManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_storage" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="_trips" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Carpooling.Core.Managers.UserManager">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <AssociationLine Name="_storage" Type="Carpooling.Core.Interfaces.IDataStorage">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.146" Y="0.053" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAIAAAAAQAAEAgAA=</HashCode>
+      <FileName>Managers\UserManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_storage" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="_users" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Admin">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Admin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Booking">
+    <Position X="3.5" Y="6.5" Width="1.5" />
+    <AssociationLine Name="Passenger" Type="Carpooling.Core.Models.Passenger">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.503" Y="0.089" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAoAAEAAAAAAAAAAAAAEAAAAAAAAAIAA=</HashCode>
+      <FileName>Models\Booking.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Trip" />
+      <Property Name="Passenger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Driver">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAACAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Driver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Notification">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAACAAAAAAAAAEAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Models\Notification.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Receiver" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Passenger">
+    <Position X="3.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Models\Passenger.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Bookings" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Carpooling.Core.Models.Trip" BaseTypeListCollapsed="true">
+    <Position X="6" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAQAgAAYAAAAAAAAAAAQAAAAQAAIgAAAEAAA=</HashCode>
+      <FileName>Models\Trip.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Bookings" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Orientation="Left" Position="0.158" />
+  </Class>
+  <Class Name="Carpooling.Core.Models.User">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgIAAEAAAAAAAAAAAAAACAAAQIAAQAAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Carpooling.Core.Services.JsonDataStorage">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAEAAAEAAAAAAAAAAAAAQAYAAAAAAAA=</HashCode>
+      <FileName>Services\JsonDataStorage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Left" Position="0.371" />
+  </Class>
+  <Class Name="Carpooling.Core.Validators.TripValidator">
+    <Position X="11.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAACAACAAAAAAAIAAAAA=</HashCode>
+      <FileName>Validators\TripValidator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Carpooling.Core.Validators.UserValidator">
+    <Position X="11.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAABAAAgAA=</HashCode>
+      <FileName>Validators\UserValidator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Carpooling.Core.Interfaces.IDataStorage">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAQAYAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IDataStorage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
