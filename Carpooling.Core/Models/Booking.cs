@@ -11,15 +11,24 @@ namespace Carpooling.Core.Models
         public int SeatsCount { get; set; }
 
         // Поведінка
+
+        // Перевірити актуальність: повертає true, якщо статус поїздки – Активна
         public bool IsActive()
         {
-            throw new NotImplementedException();
+            // Якщо посилання на поїздку порожнє, бронювання не може бути активним
+            if (Trip == null) return false;
+            return Trip.Status == "Активна";
         }
 
+        // Отримати деталі: формує короткий опис для особистого кабінету
         public string GetDetails()
         {
-            // Формує короткий опис для особистого кабінету (маршрут, дата, місця)
-            throw new NotImplementedException();
+            if (Trip == null) return "Дані про поїздку відсутні";
+
+            // Маршрут, дата, кількість місць
+            return $"Маршрут: {Trip.DepartureCity} — {Trip.ArrivalCity}, " +
+                   $"Дата: {Trip.DepartureTime:dd.MM.yyyy HH:mm}, " +
+                   $"Місць: {SeatsCount}";
         }
     }
 }
