@@ -7,12 +7,17 @@ using System.Collections.Generic;
 
 namespace Carpooling.Tests
 {
-    // Проста мок-реалізація для тестів
     public class FakeStorage : IDataStorage
     {
         public IEnumerable<Trip> LoadTrips() => new List<Trip>();
         public void SaveTrips(IEnumerable<Trip> trips) { }
-        public IEnumerable<User> LoadUsers() => new List<User>();
+
+        public IEnumerable<User> LoadUsers() => new List<User>
+    {
+        new Admin { Login = "admin", Password = "admin123" },
+        new Passenger { Login = "user1", Password = "password123" }
+    };
+
         public void SaveUsers(IEnumerable<User> users) { }
     }
 

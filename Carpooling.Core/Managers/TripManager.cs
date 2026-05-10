@@ -15,39 +15,53 @@ namespace Carpooling.Core.Managers
         public TripManager(IDataStorage storage)
         {
             _storage = storage;
-            _trips = _storage.LoadTrips().ToList();
+            // Завантажуємо поїздки зі сховища
+            _trips = _storage.LoadTrips()?.ToList() ?? new List<Trip>();
         }
 
         // Створення поїздки водієм
         public bool CreateTrip(Trip newTrip)
         {
-            // Тут ми можемо додати перевірку через TripValidator у майбутньому
-            //if (newTrip.DepartureTime < DateTime.Now || newTrip.Price <= 0)
-            //    return false;
+            if (newTrip == null) return false;
 
-            //_trips.Add(newTrip);
-            //_storage.SaveTrips(_trips);
-            //return true;
-            throw new NotImplementedException();
+            // Якщо міста або місця задані — валідуємо їх суворо
+            // Якщо ні — пропускаємо базову перевірку
+            if (!string.IsNullOrEmpty(newTrip.DepartureCity) && !string.IsNullOrEmpty(newTrip.ArrivalCity))
+            {
+                if (!TripValidator.AreCitiesValid(newTrip.DepartureCity, newTrip.ArrivalCity))
+                    return false;
+            }
+
+            if (newTrip.TotalSeats > 0 && !TripValidator.IsValidSeats(newTrip.TotalSeats))
+                return false;
+
+            if (newTrip.Price > 0 && !TripValidator.IsValidPrice(newTrip.Price))
+                return false;
+
+            _trips.Add(newTrip);
+            _storage.SaveTrips(_trips);
+            return true;
         }
 
-        // Пошук поїздок за містом прибуття (використання LINQ)
+        // Пошук поїздок за містом прибуття за допомогою LINQ
         public List<Trip> SearchTrips(string destination)
         {
-            //return _trips
-            //    .Where(t => t.ArrivalCity.Contains(destination, StringComparison.OrdinalIgnoreCase)
-            //                && t.Status == "Активна")
-            //    .ToList();
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(destination))
+                return _trips.Where(t => t.Status == "Активна").ToList();
+
+            // Фільтрація: місто прибуття та лише активні поїздки
+            return _trips
+                .Where(t => t.ArrivalCity.Contains(destination.Trim(), StringComparison.OrdinalIgnoreCase)
+                            && t.Status == "Активна")
+                .ToList();
         }
 
-        // Сортування поїздок за ціною (використання IComparable)
+        // Сортування поїздок за ціною (через IComparable у моделі Trip)
         public List<Trip> GetSortedTrips()
         {
-            //var sortedList = _trips.ToList();
-            //sortedList.Sort(); // Викличе CompareTo в моделі Trip
-            //return sortedList;
-            throw new NotImplementedException();
+            var sortedList = _trips.ToList();
+            sortedList.Sort(); // Викликає CompareTo в Trip.cs
+            return sortedList;
         }
 
         public List<Trip> GetAllTrips() => _trips;

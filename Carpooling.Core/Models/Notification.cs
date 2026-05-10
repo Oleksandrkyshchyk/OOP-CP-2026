@@ -10,7 +10,7 @@ namespace Carpooling.Core.Models
 
         public Notification(){ }
 
-        // Поведінка (Таблиця 2.14)
+        // Поведінка
         public string FormatMessage(string eventType, object additionalData)
         {
             // Логіка формування тексту на основі типу події
