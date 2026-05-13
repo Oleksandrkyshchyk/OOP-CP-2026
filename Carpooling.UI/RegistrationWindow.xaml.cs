@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input; // Додано для KeyEventArgs
 using Carpooling.Core.Managers;
 using Carpooling.Core.Models;
 using Carpooling.Core.Validators;
@@ -10,40 +11,78 @@ namespace Carpooling.UI
 {
     public partial class RegistrationWindow : Window
     {
-        // Тільки оголошуємо змінну
         private UserManager _userManager;
 
         public RegistrationWindow()
         {
             InitializeComponent();
-
-            // Ініціалізуємо менеджер, передаючи йому сховище (виправляє CS1729)
-            // Використовуємо JsonDataStorage з вашого файлу JsonDataStorage.cs
             _userManager = new UserManager(new JsonDataStorage());
+
+            // 1. Встановлюємо фокус на перше поле при завантаженні
+            txtFullName.Focus();
+
+            // Прив'язуємо обробник Enter для полів (можна зробити в XAML або тут)
+            SetupEnterNavigation();
+        }
+
+        private void SetupEnterNavigation()
+        {
+            // Список полів для зручного переходу
+            txtFullName.KeyDown += MoveFocusOnEnter;
+            txtLogin.KeyDown += MoveFocusOnEnter;
+            txtPhone.KeyDown += MoveFocusOnEnter;
+            txtPassword.KeyDown += MoveFocusOnEnter;
+            txtConfirmPassword.KeyDown += (s, e) => { if (e.Key == Key.Enter) btnRegister_Click(null, null); };
+        }
+
+        private void MoveFocusOnEnter(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // Переміщуємо фокус на наступний елемент у порядку TabIndex
+                var request = new TraversalRequest(FocusNavigationDirection.Next);
+                (sender as FrameworkElement)?.MoveFocus(request);
+            }
         }
 
         private void btnRegister_Click(object sender, RoutedEventArgs e)
         {
-            // Перевіряємо чи поля існують в XAML (x:Name="txtFullName" тощо)
             string fullName = txtFullName.Text.Trim();
             string login = txtLogin.Text.Trim();
             string phone = txtPhone.Text.Trim();
             string password = txtPassword.Password;
             string confirmPassword = txtConfirmPassword.Password;
-
-            // Отримуємо текст обраної ролі
             string selectedRole = (cmbRole.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-            // Валідація через ваш стат. клас UserValidator
+            // --- Додаткова валідація ---
+
+            // 3. Перевірка імені (Обов'язкове)
+            if (string.IsNullOrWhiteSpace(fullName) || fullName.Length < 2)
+            {
+                MessageBox.Show("Будь ласка, введіть коректне ім'я та прізвище!", "Помилка");
+                txtFullName.Focus();
+                return;
+            }
+
             if (!UserValidator.IsValidLogin(login))
             {
                 MessageBox.Show("Логін має бути від 3 символів без пробілів!", "Помилка");
+                txtLogin.Focus();
+                return;
+            }
+
+            // 2. Перевірка телефону (Обов'язкове)
+            if (!UserValidator.IsValidPhone(phone))
+            {
+                MessageBox.Show("Введіть коректний номер телефону (наприклад, +380991234567)!", "Помилка");
+                txtPhone.Focus();
                 return;
             }
 
             if (!UserValidator.IsValidPassword(password))
             {
-                MessageBox.Show("Пароль має містити від 8 символів, велику літеру та цифру!", "Слабкий пароль");
+                MessageBox.Show("Пароль має містити від 8 символів, велику латинську літеру та цифру!", "Слабкий пароль");
+                txtPassword.Focus();
                 return;
             }
 
@@ -53,7 +92,7 @@ namespace Carpooling.UI
                 return;
             }
 
-            // Створення об'єкта через поліморфізм
+            // Створення об'єкта
             User newUser;
             if (selectedRole == "Водій")
             {
@@ -64,7 +103,6 @@ namespace Carpooling.UI
                 newUser = new Passenger { FullName = fullName, Login = login, Phone = phone, Password = password };
             }
 
-            // Виклик реєстрації
             if (_userManager.Register(newUser))
             {
                 MessageBox.Show("Реєстрація успішна!", "Успіх");

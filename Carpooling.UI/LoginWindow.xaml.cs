@@ -45,9 +45,9 @@ namespace Carpooling.UI
                 MessageBox.Show($"Авторизація успішна! Вітаємо, {user.FullName}.\nВаша роль: {user.GetRoleName()}", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // Тут буде відкриття MainWindow і передача туди об'єкта user
-                // MainWindow main = new MainWindow(user);
-                // main.Show();
-                // this.Close();
+                MainWindow main = new MainWindow(user);
+                main.Show();
+                this.Close();
             }
             else
             {
@@ -68,9 +68,9 @@ namespace Carpooling.UI
         private void btnGuest_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Ви увійшли як Гість. Вам доступний лише загальний перегляд поїздок. Для бронювання, будь ласка, зареєструйтесь.", "Гостьовий доступ", MessageBoxButton.OK, MessageBoxImage.Information);
-            // MainWindow main = new MainWindow(null); // null означає гостьовий режим
-            // main.Show();
-            // this.Close();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
     }
 }

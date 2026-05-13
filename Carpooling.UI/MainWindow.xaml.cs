@@ -1,25 +1,67 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Carpooling.Core.Models;
 
-namespace Carpooling.UI;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace Carpooling.UI
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        private User _currentUser;
 
+        // Використовуємо один конструктор з необов'язковим параметром
+        public MainWindow(User user = null)
+        {
+            InitializeComponent();
+            _currentUser = user;
+
+            if (this.IsLoaded)
+            {
+                UpdateUI();
+            }
+            else
+            {
+                this.Loaded += (s, e) => UpdateUI();
+            }
+        }
+
+        private void UpdateUI()
+        {
+            // Тепер btnAccount точно не буде null під час виконання Loaded
+            if (_currentUser == null)
+            {
+                btnAccount.Content = "Увійти / Реєстрація";
+            }
+            else
+            {
+                btnAccount.Content = $"{_currentUser.FullName} (Профіль)";
+            }
+        }
+
+        private void btnAccount_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentUser == null)
+            {
+                LoginWindow login = new LoginWindow();
+                login.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show($"Вітаємо, {_currentUser.FullName}! Вікно профілю в розробці.");
+            }
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string from = txtFrom.Text.Trim();
+            string to = txtTo.Text.Trim();
+
+            if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
+            {
+                MessageBox.Show("Будь ласка, вкажіть міста для пошуку!", "Попередження");
+                return;
+            }
+
+            MessageBox.Show($"Шукаємо поїздки з {from} у {to}...");
+        }
     }
-
 }
