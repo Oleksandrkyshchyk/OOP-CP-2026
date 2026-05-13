@@ -54,14 +54,17 @@ namespace Carpooling.UI
         {
             string from = txtFrom.Text.Trim();
             string to = txtTo.Text.Trim();
+            DateTime? selectedDate = dateTrip.SelectedDate; // Отримуємо дату з DatePicker
 
             if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
             {
-                MessageBox.Show("Будь ласка, вкажіть міста для пошуку!", "Попередження");
+                MessageBox.Show("Будь ласка, вкажіть міста для пошуку!", "Попередження", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            MessageBox.Show($"Шукаємо поїздки з {from} у {to}...");
+            SearchResultsWindow resultsWindow = new SearchResultsWindow(from, to, selectedDate, _currentUser);
+            resultsWindow.Show();
+            this.Close();
         }
     }
 }

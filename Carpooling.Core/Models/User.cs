@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Carpooling.Core.Validators;
 
 namespace Carpooling.Core.Models
 {
+    [JsonDerivedType(typeof(Admin), typeDiscriminator: "admin")]
+    [JsonDerivedType(typeof(Driver), typeDiscriminator: "driver")]
+    [JsonDerivedType(typeof(Passenger), typeDiscriminator: "passenger")]
     // Абстрактний клас
     public abstract class User
     {

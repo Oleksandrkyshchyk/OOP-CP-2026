@@ -12,4 +12,13 @@
     <ProjectReference Include="..\Carpooling.Core\Carpooling.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="trips.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="users.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

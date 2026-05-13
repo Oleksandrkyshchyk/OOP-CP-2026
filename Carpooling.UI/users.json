@@ -1,0 +1,18 @@
+﻿[
+  {
+    "$type": "admin",
+    "Login": "admin",
+    "Password": "Admin123",
+    "FullName": "Головний Адміністратор",
+    "Phone": "+380000000000",
+    "Role": "Адміністратор"
+  },
+  {
+    "$type": "driver",
+    "Login": "driver1",
+    "Password": "Password123",
+    "FullName": "Олексій Петренко",
+    "Phone": "+380991112233",
+    "Role": "Водій"
+  }
+]

@@ -6,6 +6,7 @@ namespace Carpooling.Core.Models
 {
     public class Trip : IComparable<Trip>
     {
+
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }
         public DateTime DepartureTime { get; set; }

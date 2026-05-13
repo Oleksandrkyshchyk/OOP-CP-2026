@@ -20,10 +20,16 @@ namespace Carpooling.Core.Services
             try
             {
                 string json = File.ReadAllText(UsersFile);
-                // Використовуємо стандартні засоби .NET для десеріалізації
-                return JsonSerializer.Deserialize<List<User>>(json) ?? new List<User>();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true, // Ігнорувати регістр назв (Login vs login)
+                    WriteIndented = true
+                };
+
+                return JsonSerializer.Deserialize<List<User>>(json, options) ?? new List<User>();
             }
-            catch
+            catch (Exception ex)
             {
                 return new List<User>();
             }

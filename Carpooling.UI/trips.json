@@ -1,0 +1,20 @@
+﻿[
+  {
+    "DepartureCity": "Лебедин",
+    "ArrivalCity": "Київ",
+    "DepartureTime": "2026-05-15T12:00:00",
+    "Price": 400.0,
+    "TotalSeats": 4,
+    "Status": "Активна",
+    "Bookings": []
+  },
+  {
+    "DepartureCity": "Київ",
+    "ArrivalCity": "Львів",
+    "DepartureTime": "2026-05-20T08:00:00",
+    "Price": 600.0,
+    "TotalSeats": 3,
+    "Status": "Активна",
+    "Bookings": []
+  }
+]
