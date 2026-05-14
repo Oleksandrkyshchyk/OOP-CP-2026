@@ -1,6 +1,7 @@
 ﻿[
   {
     "$type": "admin",
+    "AccessLevel": 1,
     "Login": "admin",
     "Password": "Admin123",
     "FullName": "Головний Адміністратор",
@@ -9,6 +10,9 @@
   },
   {
     "$type": "driver",
+    "CarModel": "Skoda Octavia",
+    "LicensePlate": "KA 5577 BP",
+    "OwnTrips": [],
     "Login": "driver1",
     "Password": "Password123",
     "FullName": "Олексій Петренко",

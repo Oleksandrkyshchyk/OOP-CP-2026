@@ -23,16 +23,40 @@ namespace Carpooling.UI
             }
         }
 
+        // MainWindow.xaml.cs
+
         private void UpdateUI()
         {
-            // Тепер btnAccount точно не буде null під час виконання Loaded
             if (_currentUser == null)
             {
                 btnAccount.Content = "Увійти / Реєстрація";
+                btnCreateTrip.Visibility = Visibility.Collapsed; // Гість не бачить кнопку
             }
             else
             {
                 btnAccount.Content = $"{_currentUser.FullName} (Профіль)";
+
+                // Перевіряємо, чи є користувач водієм
+                if (_currentUser is Driver)
+                {
+                    btnCreateTrip.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    btnCreateTrip.Visibility = Visibility.Collapsed; // Пасажир не бачить кнопку
+                }
+            }
+        }
+
+        // Обробник натискання
+        private void btnCreateTrip_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentUser is Driver driver)
+            {
+                // Відкриваємо наше нове вікно, передаючи поточного водія та це вікно як батьківське
+                CreateTripWindow createTripWin = new CreateTripWindow(driver, this);
+                createTripWin.Show();
+                this.Hide(); // Ховаємо головне вікно, поки створюється поїздка
             }
         }
 

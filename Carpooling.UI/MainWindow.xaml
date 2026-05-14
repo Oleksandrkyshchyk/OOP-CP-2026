@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Carpooling.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FocusFlow Carpooling - Головна" Height="570" Width="950"
+        Title="FocusFlow Carpooling - Головна" Height="620" Width="950"
         WindowStartupLocation="CenterScreen" Background="#F4F7F9">
 
     <Window.Resources>
@@ -53,12 +53,16 @@
     </Window.Resources>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="19*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+        <Border Grid.Row="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Grid.ColumnSpan="2">
             <DockPanel LastChildFill="False" Margin="30,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Carpooling.App" FontSize="26" FontWeight="Bold" Foreground="#2D3436" Margin="8,0,0,0"/>
@@ -70,7 +74,7 @@
             </DockPanel>
         </Border>
 
-        <Grid Grid.Row="1" Margin="40">
+        <Grid Grid.Row="1" Margin="40,40,40,40" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="380"/>
                 <ColumnDefinition Width="*"/>
@@ -100,6 +104,24 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="btnBorder" Property="Background" Value="#1976D2"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="btnCreateTrip" Content="Створити поїздку" 
+                            Height="45" Margin="0,15,0,0" Background="#27AE60" Foreground="White" FontSize="16" FontWeight="Bold"
+                            Visibility="Collapsed"
+                            Click="btnCreateTrip_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#219150"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
