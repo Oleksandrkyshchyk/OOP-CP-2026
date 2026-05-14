@@ -127,6 +127,21 @@
                                         <TextBlock Text="{Binding DepartureTime, StringFormat='{}{0:dd.MM.yyyy}'}" FontSize="14" Foreground="#636E72"/>
                                     </StackPanel>
 
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="#2D3436">
+                                            <Run Text="{Binding DepartureCity}"/> 
+                                            <Run Text="→" Foreground="#2196F3"/> 
+                                            <Run Text="{Binding ArrivalCity}"/>
+                                        </TextBlock>
+
+                                        <Button Content="Переглянути деталі" 
+                                                Style="{StaticResource LinkButtonStyle}" 
+                                                HorizontalAlignment="Left" 
+                                                Margin="0,5,0,0"
+                                                Tag="{Binding}" 
+                                                Click="btnDetails_Click"/>
+                                    </StackPanel>
+
                                     <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                                         <TextBlock Text="{Binding Price, StringFormat='{}{0} грн'}" 
                FontSize="22" FontWeight="Bold" Foreground="#00B894" HorizontalAlignment="Right"/>

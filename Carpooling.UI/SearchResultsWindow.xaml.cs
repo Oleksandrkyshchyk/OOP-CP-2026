@@ -114,5 +114,23 @@ namespace Carpooling.UI
                 }
             }
         }
+
+        private void btnDetails_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            var selectedTrip = button?.Tag as Trip;
+
+            if (selectedTrip != null)
+            {
+                // Створюємо вікно деталей, передаючи:
+                // 1. Об'єкт обраної поїздки
+                // 2. Поточного користувача (щоб знати, хто бронює)
+                // 3. Посилання на це вікно (this), щоб працювала кнопка "Назад"
+                TripDetailsWindow detailsWindow = new TripDetailsWindow(selectedTrip, _currentUser, this);
+
+                detailsWindow.Show();
+                this.Hide(); // Ховаємо список результатів, поки ми в деталях
+            }
+        }
     }
 }
