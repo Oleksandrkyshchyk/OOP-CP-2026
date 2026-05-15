@@ -30,10 +30,9 @@ namespace Carpooling.UI
             string login = txtLogin.Text.Trim();
             string password = txtPassword.Password.Trim();
 
-            // Перевірка на порожні поля
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Будь ласка, заповніть усі поля (логін та пароль)!", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Будь ласка, заповніть усі поля!", "Увага", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -42,17 +41,32 @@ namespace Carpooling.UI
             if (user != null)
             {
                 // Успішний вхід
-                MessageBox.Show($"Авторизація успішна! Вітаємо, {user.FullName}.\nВаша роль: {user.GetRoleName()}", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Авторизація успішна! Вітаємо, {user.FullName}.\nВаша роль: {user.GetRoleName()}",
+                                "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Тут буде відкриття MainWindow і передача туди об'єкта user
-                MainWindow main = new MainWindow(user);
-                main.Show();
+                // Перевірка на роль Адміністратора
+                if (user is Admin admin)
+                {
+                    // Якщо у вас є окреме вікно для адміна, відкриваємо його
+                    // AdminDashboard adminWindow = new AdminDashboard(admin);
+                    // adminWindow.Show();
+
+                    // Або відкриваємо MainWindow, де логіка UI приховає/покаже потрібні елементи
+                    MainWindow main = new MainWindow(admin);
+                    main.Show();
+                }
+                else
+                {
+                    // Вхід для звичайних користувачів (Водій/Пасажир)
+                    MainWindow main = new MainWindow(user);
+                    main.Show();
+                }
+
                 this.Close();
             }
             else
             {
-                // Невірні дані
-                MessageBox.Show("Користувача з такими даними не знайдено. Перевірте правильність логіна та пароля.", "Помилка входу", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Невірний логін або пароль.", "Помилка входу", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

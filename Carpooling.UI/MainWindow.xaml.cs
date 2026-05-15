@@ -28,20 +28,20 @@ namespace Carpooling.UI
             if (_currentUser == null)
             {
                 btnAccount.Content = "Увійти / Реєстрація";
-                btnCreateTrip.Visibility = Visibility.Collapsed; // Гість не бачить кнопку
+                btnCreateTrip.Visibility = Visibility.Collapsed;
+                btnAdminPanel.Visibility = Visibility.Collapsed; // Ховаємо панель адміна для гостей
             }
             else
             {
                 btnAccount.Content = $"{_currentUser.FullName} (Профіль)";
 
-                // Перевіряємо, чи є користувач водієм
-                if (_currentUser is Driver)
+                // Відображення кнопки створення поїздки для водіїв
+                btnCreateTrip.Visibility = (_currentUser is Driver) ? Visibility.Visible : Visibility.Collapsed;
+
+                // Відображення кнопки панелі адміністратора
+                if (btnAdminPanel != null) // Перевірка, чи ви вже додали її в XAML
                 {
-                    btnCreateTrip.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    btnCreateTrip.Visibility = Visibility.Collapsed; // Пасажир не бачить кнопку
+                    btnAdminPanel.Visibility = (_currentUser is Admin) ? Visibility.Visible : Visibility.Collapsed;
                 }
             }
         }
@@ -88,6 +88,17 @@ namespace Carpooling.UI
             SearchResultsWindow resultsWindow = new SearchResultsWindow(from, to, selectedDate, _currentUser);
             resultsWindow.Show();
             this.Close();
+        }
+
+        private void btnAdminPanel_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentUser is Admin admin)
+            {
+                // Припустимо, вікно називається AdminWindow
+                AdminWindow adminWin = new AdminWindow(admin, this);
+                adminWin.Show();
+                this.Hide();
+            }
         }
     }
 }

@@ -18,5 +18,27 @@
     "FullName": "Олексій Петренко",
     "Phone": "+380991112233",
     "Role": "Водій"
+  },
+
+  {
+    "$type": "driver",
+    "Login": "driver2",
+    "Password": "Driver123",
+    "FullName": "Василь Петренко",
+    "Phone": "+380888888888",
+    "Role": "Водій",
+    "CarModel": "BMW E46",
+    "LicensePlate": "AA 4603 AA",
+    "OwnTrips": []
+  },
+  {
+    "$type": "passenger",
+    "Login": "pass2",
+    "Password": "Pass1234",
+    "FullName": "Герман Мельник",
+    "Phone": "+380666666666",
+    "Role": "Пасажир",
+    "Bookings": [],
+    "FavoriteRoutes": []
   }
 ]

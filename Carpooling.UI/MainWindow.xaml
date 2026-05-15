@@ -127,6 +127,24 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+
+                    <Button x:Name="btnAdminPanel" Content="Панель адміністратора" 
+                            Height="45" Margin="0,15,0,0" Background="#1976D2" Foreground="White" FontSize="16" FontWeight="Bold"
+                            Visibility="Collapsed"
+                            Click="btnAdminPanel_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="8">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#0D47A1"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
             </Border>
 
