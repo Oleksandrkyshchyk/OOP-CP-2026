@@ -83,7 +83,7 @@ namespace Carpooling.Core.Managers
             if (index != -1)
             {
                 _trips[index] = updatedTrip;
-                return SaveChanges(); // Використовуємо новий метод
+                return SaveChanges();
             }
             return false;
         }

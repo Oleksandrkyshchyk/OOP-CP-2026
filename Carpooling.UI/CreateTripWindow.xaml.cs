@@ -76,7 +76,7 @@ namespace Carpooling.UI
             if (!int.TryParse(txtSeats.Text, out int seats) || !decimal.TryParse(txtPrice.Text, out decimal price))
             {
                 MessageBox.Show("Кількість місць та ціна мають бути числовими значеннями.", "Помилка вводу", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; // Зупиняємо виконання
+                return;
             }
 
             // 5. БІЗНЕС-ВАЛІДАЦІЯ (через TripValidator)

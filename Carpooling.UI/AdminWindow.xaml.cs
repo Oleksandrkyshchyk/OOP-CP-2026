@@ -72,7 +72,6 @@ namespace Carpooling.UI
 
             if (!string.IsNullOrWhiteSpace(newPass))
             {
-                // ВИПРАВЛЕНО: Використовуємо твій валідатор
                 if (UserValidator.IsValidPassword(newPass))
                 {
                     user.Password = newPass;

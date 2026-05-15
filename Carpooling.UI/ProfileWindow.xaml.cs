@@ -118,7 +118,7 @@ namespace Carpooling.UI
             }
         }
 
-        // --- Методи для редагування ---
+        // Методи для редагування 
         private void btnEditProfile_Click(object sender, RoutedEventArgs e)
         {
             panelDriver.Visibility = Visibility.Collapsed;
@@ -168,6 +168,18 @@ namespace Carpooling.UI
         private void btnCancelEdit_Click(object sender, RoutedEventArgs e) => ExitEditMode();
         private void ExitEditMode() { panelEditProfile.Visibility = Visibility.Collapsed; LoadUserData(); }
         private void btnBack_Click(object sender, RoutedEventArgs e) { _mainWindow?.Show(); this.Close(); }
-        private void btnLogout_Click(object sender, RoutedEventArgs e) { new MainWindow(null).Show(); this.Close(); }
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow login = new MainWindow(null);
+            login.Show();
+
+            foreach (Window win in Application.Current.Windows)
+            {
+                if (win != login)
+                {
+                    win.Close();
+                }
+            }
+        }
     }
 }

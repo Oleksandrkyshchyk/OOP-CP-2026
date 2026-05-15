@@ -47,11 +47,6 @@ namespace Carpooling.UI
                 // Перевірка на роль Адміністратора
                 if (user is Admin admin)
                 {
-                    // Якщо у вас є окреме вікно для адміна, відкриваємо його
-                    // AdminDashboard adminWindow = new AdminDashboard(admin);
-                    // adminWindow.Show();
-
-                    // Або відкриваємо MainWindow, де логіка UI приховає/покаже потрібні елементи
                     MainWindow main = new MainWindow(admin);
                     main.Show();
                 }
