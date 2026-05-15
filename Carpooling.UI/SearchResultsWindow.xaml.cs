@@ -12,7 +12,7 @@ namespace Carpooling.UI
     {
         private readonly TripManager _tripManager;
         private List<Trip> _results;
-        private User _currentUser; // Поле для зберігання поточного користувача
+        private User _currentUser;
 
         // Конструктор з параметром currentUser
         public SearchResultsWindow(string from, string to, DateTime? date, User currentUser = null)
@@ -89,47 +89,102 @@ namespace Carpooling.UI
             }
             else
             {
-                MessageBox.Show($"Вітаємо, {_currentUser.FullName}! Вікно профілю в розробці.");
+                ProfileWindow profile = new ProfileWindow(_currentUser, this);
+                profile.Show();
+                this.Hide();
             }
         }
 
         // Обробник кнопки "Забронювати"
         private void btnBook_Click(object sender, RoutedEventArgs e)
         {
+            // 1. Перевірка на авторизацію
+            if (_currentUser == null)
+            {
+                MessageBox.Show("Будь ласка, увійдіть, щоб забронювати місце.", "Авторизація");
+                return;
+            }
+
+            // 2. Блокування бронювань від водіїв (та інших ролей, крім Пасажира)
+            if (_currentUser.Role != "Пасажир")
+            {
+                MessageBox.Show("Тільки користувачі з роллю 'Пасажир' можуть бронювати поїздки.", "Обмеження ролі");
+                return;
+            }
+
             var button = sender as FrameworkElement;
             var selectedTrip = button?.Tag as Trip;
 
             if (selectedTrip != null)
             {
+                // Заборона бронювати власну поїздку (якщо водій раптом має роль пасажира)
+                if (selectedTrip.DriverLogin == _currentUser.Login)
+                {
+                    MessageBox.Show("Ви не можете забронювати місце у власній поїздці.", "Помилка");
+                    return;
+                }
+
+                // Перевірка на повторне бронювання одним і тим самим пасажиром
+                bool alreadyBooked = selectedTrip.Bookings != null &&
+                                     selectedTrip.Bookings.Any(b => b.Passenger != null && b.Passenger.Login == _currentUser.Login);
+
+                if (alreadyBooked)
+                {
+                    MessageBox.Show("Ви вже забронювали місце у цій поїздці. Повторне бронювання неможливе.", "Повторна дія");
+                    return;
+                }
+
+                // 5. Перевірка наявності вільних місць
                 if (selectedTrip.CalculateFreeSeats() > 0)
                 {
-                    MessageBox.Show($"Ви забронювали місце у поїздці: {selectedTrip.DepartureCity} - {selectedTrip.ArrivalCity}",
-                                    "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Створення бронювання
+                    var newBooking = new Booking
+                    {
+                        Passenger = _currentUser as Passenger,
+                        Trip = selectedTrip,
+                        SeatsCount = 1,
+                        BookingDate = DateTime.Now
+                    };
 
-                    PerformSearch();
+                    if (selectedTrip.Bookings == null) selectedTrip.Bookings = new List<Booking>();
+                    selectedTrip.Bookings.Add(newBooking);
+
+                    // Збереження в JSON через TripManager
+                    if (_tripManager.UpdateTrip(selectedTrip))
+                    {
+                        MessageBox.Show($"Місце успішно заброньовано!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
+                        PerformSearch(); // Оновлюємо список результатів
+                    }
+                    else
+                    {
+                        MessageBox.Show("Сталася помилка при збереженні даних у базу.");
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("На жаль, вільних місць більше немає.", "Помилка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("На жаль, вільних місць більше немає.", "Помилка");
                 }
             }
         }
 
         private void btnDetails_Click(object sender, RoutedEventArgs e)
         {
+            // Приховуємо деталі від гостей
+            if (_currentUser == null)
+            {
+                MessageBox.Show("Детальна інформація про водія та автомобіль доступна лише авторизованим користувачам.",
+                                "Доступ обмежено", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             var button = sender as FrameworkElement;
             var selectedTrip = button?.Tag as Trip;
 
             if (selectedTrip != null)
             {
-                // Створюємо вікно деталей, передаючи:
-                // 1. Об'єкт обраної поїздки
-                // 2. Поточного користувача (щоб знати, хто бронює)
-                // 3. Посилання на це вікно (this), щоб працювала кнопка "Назад"
                 TripDetailsWindow detailsWindow = new TripDetailsWindow(selectedTrip, _currentUser, this);
-
                 detailsWindow.Show();
-                this.Hide(); // Ховаємо список результатів, поки ми в деталях
+                this.Hide();
             }
         }
     }

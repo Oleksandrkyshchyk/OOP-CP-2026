@@ -6,6 +6,8 @@ namespace Carpooling.Core.Models
     {
         // Характеристики
         public Passenger Passenger { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public Trip Trip { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
         public int SeatsCount { get; set; }

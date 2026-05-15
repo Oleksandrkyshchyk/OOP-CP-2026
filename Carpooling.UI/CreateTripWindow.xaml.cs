@@ -45,22 +45,22 @@ namespace Carpooling.UI
 
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Збір текстових даних
+            // Збір текстових даних
             string from = txtFrom.Text.Trim();
             string to = txtTo.Text.Trim();
             string timeStr = txtTime.Text.Trim();
 
-            // 2. ВАЛІДАЦІЯ: Порожні поля (Маршрут)
+            // Порожні поля (Маршрут)
             if (string.IsNullOrWhiteSpace(from) || string.IsNullOrWhiteSpace(to))
             {
                 MessageBox.Show("Будь ласка, вкажіть місто відправлення та місто прибуття!", "Помилка заповнення", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return; // Зупиняємо виконання
             }
 
-            // 3. ВАЛІДАЦІЯ: Формат дати та часу
+            // Формат дати та часу
             if (!datePicker.SelectedDate.HasValue ||
                 string.IsNullOrWhiteSpace(timeStr) ||
-                !timeStr.Contains(":") || // Перевіряємо наявність двокрапки, щоб "36" не пройшло
+                !timeStr.Contains(":") || // Перевіряємо наявність двокрапки
                 !TimeSpan.TryParse(timeStr, out TimeSpan time) ||
                 time.Days > 0) // Перевіряємо, щоб значення не виходило за межі 24 годин
             {
@@ -72,7 +72,7 @@ namespace Carpooling.UI
             // Формуємо повну дату виїзду
             DateTime departureDateTime = datePicker.SelectedDate.Value.Date.Add(time);
 
-            // 4. ВАЛІДАЦІЯ: Числові дані (Місця та Ціна)
+            // Числові дані (Місця та Ціна)
             if (!int.TryParse(txtSeats.Text, out int seats) || !decimal.TryParse(txtPrice.Text, out decimal price))
             {
                 MessageBox.Show("Кількість місць та ціна мають бути числовими значеннями.", "Помилка вводу", MessageBoxButton.OK, MessageBoxImage.Warning);

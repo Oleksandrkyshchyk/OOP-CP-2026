@@ -60,10 +60,25 @@ namespace Carpooling.Core.Managers
         public List<Trip> GetSortedTrips()
         {
             var sortedList = _trips.ToList();
-            sortedList.Sort(); // Викликає CompareTo в Trip.cs
+            sortedList.Sort();
             return sortedList;
         }
 
         public List<Trip> GetAllTrips() => _trips;
+
+        public bool UpdateTrip(Trip updatedTrip)
+        {
+            // Знаходимо стару поїздку в списку за ID або часом/маршрутом і замінюємо її
+            var trips = GetAllTrips();
+            var index = trips.FindIndex(t => t.DepartureTime == updatedTrip.DepartureTime && t.DriverLogin == updatedTrip.DriverLogin);
+
+            if (index != -1)
+            {
+                trips[index] = updatedTrip;
+                _storage.SaveTrips(trips); // Записуємо весь оновлений список у JSON
+                return true;
+            }
+            return false;
+        }
     }
 }

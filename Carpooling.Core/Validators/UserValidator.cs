@@ -45,5 +45,16 @@ namespace Carpooling.Core.Validators
             string pattern = @"^\+380\d{9}$";
             return Regex.IsMatch(phone, pattern);
         }
+
+        // 4. Валідація Прізвища та Ім'я (Додано)
+        public static bool IsValidFullName(string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(fullName)) return false;
+
+            // Мінімум 3 символи, дозволяємо літери, пробіли та апостроф
+            // Регулярний вираз перевіряє, щоб були лише літери різних регістрів
+            string pattern = @"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ' ]{3,50}$";
+            return Regex.IsMatch(fullName, pattern);
+        }
     }
 }

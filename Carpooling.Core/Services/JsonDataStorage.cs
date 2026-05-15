@@ -16,23 +16,17 @@ namespace Carpooling.Core.Services
         public IEnumerable<User> LoadUsers()
         {
             if (!File.Exists(UsersFile)) return new List<User>();
-
             try
             {
                 string json = File.ReadAllText(UsersFile);
-
                 var options = new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true, // Ігнорувати регістр назв (Login vs login)
-                    WriteIndented = true
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
                 };
-
                 return JsonSerializer.Deserialize<List<User>>(json, options) ?? new List<User>();
             }
-            catch (Exception ex)
-            {
-                return new List<User>();
-            }
+            catch { return new List<User>(); }
         }
 
         // Збереження користувачів
@@ -43,7 +37,7 @@ namespace Carpooling.Core.Services
             File.WriteAllText(UsersFile, json);
         }
 
-        // Аналогічна логіка для поїздок
+        // Для поїздок
         public IEnumerable<Trip> LoadTrips()
         {
             if (!File.Exists(TripsFile)) return new List<Trip>();
@@ -51,7 +45,14 @@ namespace Carpooling.Core.Services
             try
             {
                 string json = File.ReadAllText(TripsFile);
-                return JsonSerializer.Deserialize<List<Trip>>(json) ?? new List<Trip>();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                };
+
+                return JsonSerializer.Deserialize<List<Trip>>(json, options) ?? new List<Trip>();
             }
             catch
             {
@@ -61,7 +62,13 @@ namespace Carpooling.Core.Services
 
         public void SaveTrips(IEnumerable<Trip> trips)
         {
-            string json = JsonSerializer.Serialize(trips, new JsonSerializerOptions { WriteIndented = true });
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+            };
+
+            string json = JsonSerializer.Serialize(trips, options);
             File.WriteAllText(TripsFile, json);
         }
     }

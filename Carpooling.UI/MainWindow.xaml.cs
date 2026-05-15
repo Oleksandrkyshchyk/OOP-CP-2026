@@ -23,9 +23,7 @@ namespace Carpooling.UI
             }
         }
 
-        // MainWindow.xaml.cs
-
-        private void UpdateUI()
+        public void UpdateUI()
         {
             if (_currentUser == null)
             {
@@ -53,7 +51,6 @@ namespace Carpooling.UI
         {
             if (_currentUser is Driver driver)
             {
-                // Відкриваємо наше нове вікно, передаючи поточного водія та це вікно як батьківське
                 CreateTripWindow createTripWin = new CreateTripWindow(driver, this);
                 createTripWin.Show();
                 this.Hide(); // Ховаємо головне вікно, поки створюється поїздка
@@ -70,7 +67,9 @@ namespace Carpooling.UI
             }
             else
             {
-                MessageBox.Show($"Вітаємо, {_currentUser.FullName}! Вікно профілю в розробці.");
+                ProfileWindow profile = new ProfileWindow(_currentUser, this);
+                profile.Show();
+                this.Hide();
             }
         }
 

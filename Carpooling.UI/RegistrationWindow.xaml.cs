@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input; // Додано для KeyEventArgs
+using System.Windows.Input;
 using Carpooling.Core.Managers;
 using Carpooling.Core.Models;
 using Carpooling.Core.Validators;
@@ -18,10 +18,8 @@ namespace Carpooling.UI
             InitializeComponent();
             _userManager = new UserManager(new JsonDataStorage());
 
-            // 1. Встановлюємо фокус на перше поле при завантаженні
             txtFullName.Focus();
 
-            // Прив'язуємо обробник Enter для полів (можна зробити в XAML або тут)
             SetupEnterNavigation();
         }
 
@@ -39,7 +37,6 @@ namespace Carpooling.UI
         {
             if (e.Key == Key.Enter)
             {
-                // Переміщуємо фокус на наступний елемент у порядку TabIndex
                 var request = new TraversalRequest(FocusNavigationDirection.Next);
                 (sender as FrameworkElement)?.MoveFocus(request);
             }
@@ -54,9 +51,8 @@ namespace Carpooling.UI
             string confirmPassword = txtConfirmPassword.Password;
             string selectedRole = (cmbRole.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-            // --- Додаткова валідація ---
 
-            // 3. Перевірка імені (Обов'язкове)
+            // Перевірка імені 
             if (string.IsNullOrWhiteSpace(fullName) || fullName.Length < 2)
             {
                 MessageBox.Show("Будь ласка, введіть коректне ім'я та прізвище!", "Помилка");
@@ -71,7 +67,7 @@ namespace Carpooling.UI
                 return;
             }
 
-            // 2. Перевірка телефону (Обов'язкове)
+            // 2. Перевірка телефону
             if (!UserValidator.IsValidPhone(phone))
             {
                 MessageBox.Show("Введіть коректний номер телефону (наприклад, +380991234567)!", "Помилка");

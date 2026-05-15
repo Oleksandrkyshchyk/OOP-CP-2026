@@ -45,10 +45,15 @@ namespace Carpooling.Core.Managers
             return _users.FirstOrDefault(u => u.Login.Equals(trimmedLogin, StringComparison.OrdinalIgnoreCase) && u.Password == password);
         }
 
-        // Отримання списку для Адміністратора (Вимога А.2)
+        // Отримання списку для Адміністратора
         public List<User> GetAllUsers()
         {
             return _users;
+        }
+
+        public void SaveChanges()
+        {
+            _storage.SaveUsers(_users);
         }
     }
 }

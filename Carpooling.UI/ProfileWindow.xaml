@@ -1,0 +1,220 @@
+﻿<Window x:Class="Carpooling.UI.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Особистий кабінет" Height="650" Width="1000"
+        WindowStartupLocation="CenterScreen" Background="#F4F7F9">
+
+    <Window.Resources>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#2D3436"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="12" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LinkButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#1976D2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <TextBlock x:Name="text" Text="{TemplateBinding Content}" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="text" Property="TextDecorations" Value="Underline"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="TripItemTemplate">
+            <Border Background="White" BorderBrush="#EEE" BorderThickness="1" 
+                    CornerRadius="12" Margin="0,5" Padding="20">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" Opacity="0.05" ShadowDepth="1"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold" FontSize="18" Foreground="#2D3436">
+                            <Run Text="{Binding DepartureCity}"/>
+                            <Run Text="  →  " Foreground="#1976D2"/>
+                            <Run Text="{Binding ArrivalCity}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="📅" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DepartureTime, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" 
+                                       Foreground="#636E72" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+                        <Border VerticalAlignment="Center" Padding="12,6" Background="#E3F2FD" CornerRadius="8" Margin="0,0,10,0">
+                            <TextBlock Text="{Binding Status}" Foreground="#1976D2" FontWeight="SemiBold" FontSize="13"/>
+                        </Border>
+
+                        <Button x:Name="btnCancelBooking" 
+                                Content="Скасувати" 
+                                Foreground="#D63031"
+                                FontWeight="SemiBold"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Tag="{Binding}"
+                                Click="btnCancelBooking_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="lstPassengerBookings">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="25">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="White" CornerRadius="20" Padding="25">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel>
+                <Grid Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,15">
+                    <Ellipse Fill="#E0E6ED"/>
+                    <Viewbox x:Name="iconDriver" Width="60" Height="60" Visibility="Collapsed" Stretch="Uniform">
+                        <Path Fill="#1976D2" Data="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    </Viewbox>
+                    <Viewbox x:Name="iconPassenger" Width="55" Height="55" Visibility="Collapsed" Stretch="Uniform">
+                        <Path Fill="#1976D2" Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </Viewbox>
+                </Grid>
+
+                <TextBlock x:Name="txtUserFullName" Text="Прізвище Ім'я" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="#2D3436"/>
+                <TextBlock x:Name="txtUserRole" Text="Роль" FontSize="14" Foreground="#1976D2" HorizontalAlignment="Center" Margin="0,5,0,20"/>
+
+                <Separator Background="#F1F1F1" Margin="0,10"/>
+
+                <TextBlock Text="Логін:" FontSize="12" Foreground="#636E72" Margin="0,10,0,2"/>
+                <TextBlock x:Name="lblLogin" Text="login" FontWeight="Medium" FontSize="14"/>
+
+                <TextBlock Text="Телефон:" FontSize="12" Foreground="#636E72" Margin="0,10,0,2"/>
+                <TextBlock x:Name="lblPhone" Text="+380..." FontWeight="Medium" FontSize="14"/>
+
+                <Button x:Name="btnLogout" Content="Вийти з акаунту" Margin="0,30,0,10" Height="40" 
+                        Style="{StaticResource RoundButtonStyle}" Foreground="#D63031" Click="btnLogout_Click"/>
+
+                <Button x:Name="btnEditProfile" Content="Змінити персональні дані" Margin="0,0,0,10" Height="40" 
+                        Style="{StaticResource RoundButtonStyle}" Click="btnEditProfile_Click"/>
+
+                <Button x:Name="btnBack" Content="Назад на головну" Style="{StaticResource LinkButtonStyle}" Click="btnBack_Click" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="30,0,0,0">
+            <StackPanel x:Name="panelDriver" Visibility="Collapsed">
+                <TextBlock Text="Керування автомобілем" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#2D3436"/>
+                <Border Background="White" CornerRadius="15" Padding="25">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Margin="0,0,15,0">
+                            <TextBlock Text="Марка та модель авто" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtCarModel" Height="40" VerticalContentAlignment="Center" Padding="10,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                            <TextBlock Text="Державний номер" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtCarNumber" Height="40" VerticalContentAlignment="Center" Padding="10,0"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="2" Content="Зберегти дані" VerticalAlignment="Bottom" 
+                                Height="40" MinWidth="140" Padding="15,0" 
+                                Background="#28A745" Foreground="White" FontWeight="Bold"
+                                Style="{StaticResource RoundButtonStyle}" Click="btnSaveCar_Click"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="Мої оголошення про поїздки" FontSize="18" FontWeight="SemiBold" Margin="0,30,0,15" Foreground="#2D3436"/>
+                <ListBox x:Name="lstDriverTrips" Height="350" Background="Transparent" BorderThickness="0" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         HorizontalContentAlignment="Stretch"
+                         ItemTemplate="{StaticResource TripItemTemplate}"/>
+            </StackPanel>
+
+            <StackPanel x:Name="panelPassenger" Visibility="Collapsed">
+                <TextBlock Text="Історія моїх бронювань" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#2D3436"/>
+                <ListBox x:Name="lstPassengerBookings" Height="500" Background="Transparent" BorderThickness="0" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         HorizontalContentAlignment="Stretch"
+                         ItemTemplate="{StaticResource TripItemTemplate}"/>
+            </StackPanel>
+
+            <StackPanel x:Name="panelEditProfile" Visibility="Collapsed">
+                <TextBlock Text="Редагування персональних даних" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                <Border Background="White" CornerRadius="15" Padding="25">
+                    <StackPanel>
+                        <TextBlock Text="Прізвище та Ім'я" Margin="0,0,0,5" Foreground="Gray"/>
+                        <TextBox x:Name="editFullName" Height="40" Margin="0,0,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
+
+                        <TextBlock Text="Телефон" Margin="0,0,0,5" Foreground="Gray"/>
+                        <TextBox x:Name="editPhone" Height="40" Margin="0,0,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
+
+                        <TextBlock Text="Новий пароль" Margin="0,0,0,5" Foreground="Gray"/>
+                        <PasswordBox x:Name="editPassword" Height="40" Margin="0,0,0,25" VerticalContentAlignment="Center" Padding="10,0"/>
+
+                        <UniformGrid Columns="2">
+                            <Button Content="Зберегти" Click="btnSaveProfile_Click" Background="#28A745" Foreground="White" Height="45" Margin="0,0,10,0" Style="{StaticResource RoundButtonStyle}" FontWeight="Bold"/>
+                            <Button Content="Скасувати" Click="btnCancelEdit_Click" Height="45" Style="{StaticResource RoundButtonStyle}"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
