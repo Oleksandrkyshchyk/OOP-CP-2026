@@ -19,13 +19,25 @@ namespace Carpooling.Core.Managers
             _trips = _storage.LoadTrips()?.ToList() ?? new List<Trip>();
         }
 
+        // Збереження поточних змін у сховище
+        public bool SaveChanges()
+        {
+            try
+            {
+                _storage.SaveTrips(_trips);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         // Створення поїздки водієм
         public bool CreateTrip(Trip newTrip)
         {
             if (newTrip == null) return false;
 
-            // Якщо міста або місця задані — валідуємо їх суворо
-            // Якщо ні — пропускаємо базову перевірку
             if (!string.IsNullOrEmpty(newTrip.DepartureCity) && !string.IsNullOrEmpty(newTrip.ArrivalCity))
             {
                 if (!TripValidator.AreCitiesValid(newTrip.DepartureCity, newTrip.ArrivalCity))
@@ -39,24 +51,22 @@ namespace Carpooling.Core.Managers
                 return false;
 
             _trips.Add(newTrip);
-            _storage.SaveTrips(_trips);
-            return true;
+            return SaveChanges(); // Використовуємо новий метод
         }
 
-        // Пошук поїздок за містом прибуття за допомогою LINQ
+        // Пошук поїздок за містом прибуття
         public List<Trip> SearchTrips(string destination)
         {
             if (string.IsNullOrWhiteSpace(destination))
                 return _trips.Where(t => t.Status == "Активна").ToList();
 
-            // Фільтрація: місто прибуття та лише активні поїздки
             return _trips
                 .Where(t => t.ArrivalCity.Contains(destination.Trim(), StringComparison.OrdinalIgnoreCase)
                             && t.Status == "Активна")
                 .ToList();
         }
 
-        // Сортування поїздок за ціною (через IComparable у моделі Trip)
+        // Сортування поїздок за ціною
         public List<Trip> GetSortedTrips()
         {
             var sortedList = _trips.ToList();
@@ -68,15 +78,12 @@ namespace Carpooling.Core.Managers
 
         public bool UpdateTrip(Trip updatedTrip)
         {
-            // Знаходимо стару поїздку в списку за ID або часом/маршрутом і замінюємо її
-            var trips = GetAllTrips();
-            var index = trips.FindIndex(t => t.DepartureTime == updatedTrip.DepartureTime && t.DriverLogin == updatedTrip.DriverLogin);
+            var index = _trips.FindIndex(t => t.DepartureTime == updatedTrip.DepartureTime && t.DriverLogin == updatedTrip.DriverLogin);
 
             if (index != -1)
             {
-                trips[index] = updatedTrip;
-                _storage.SaveTrips(trips); // Записуємо весь оновлений список у JSON
-                return true;
+                _trips[index] = updatedTrip;
+                return SaveChanges(); // Використовуємо новий метод
             }
             return false;
         }

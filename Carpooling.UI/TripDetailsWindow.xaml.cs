@@ -87,6 +87,12 @@ namespace Carpooling.UI
                 return;
             }
 
+            if (_trip.DepartureTime < DateTime.Now)
+            {
+                MessageBox.Show("Ця поїздка вже відбулася або розпочалася. Бронювання неможливе.", "Помилка часу");
+                return;
+            }
+
             // 4. Перевірка на повторне бронювання
             bool alreadyBooked = _trip.Bookings != null &&
                                  _trip.Bookings.Any(b => b.Passenger != null && b.Passenger.Login == _currentUser.Login);

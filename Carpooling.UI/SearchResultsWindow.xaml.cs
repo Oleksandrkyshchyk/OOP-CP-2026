@@ -105,7 +105,7 @@ namespace Carpooling.UI
                 return;
             }
 
-            // 2. Блокування бронювань від водіїв (та інших ролей, крім Пасажира)
+            // 2. Блокування бронювань від водіїв
             if (_currentUser.Role != "Пасажир")
             {
                 MessageBox.Show("Тільки користувачі з роллю 'Пасажир' можуть бронювати поїздки.", "Обмеження ролі");
@@ -117,14 +117,21 @@ namespace Carpooling.UI
 
             if (selectedTrip != null)
             {
-                // Заборона бронювати власну поїздку (якщо водій раптом має роль пасажира)
+                // Перевірка на минулу дату (поїздка не повинна бути в минулому)
+                if (selectedTrip.DepartureTime < DateTime.Now)
+                {
+                    MessageBox.Show("Ця поїздка вже відбулася або розпочалася. Бронювання неможливе.", "Помилка часу");
+                    return;
+                }
+
+                // 3. Заборона бронювати власну поїздку
                 if (selectedTrip.DriverLogin == _currentUser.Login)
                 {
                     MessageBox.Show("Ви не можете забронювати місце у власній поїздці.", "Помилка");
                     return;
                 }
 
-                // Перевірка на повторне бронювання одним і тим самим пасажиром
+                // 4. Перевірка на повторне бронювання
                 bool alreadyBooked = selectedTrip.Bookings != null &&
                                      selectedTrip.Bookings.Any(b => b.Passenger != null && b.Passenger.Login == _currentUser.Login);
 
@@ -153,7 +160,7 @@ namespace Carpooling.UI
                     if (_tripManager.UpdateTrip(selectedTrip))
                     {
                         MessageBox.Show($"Місце успішно заброньовано!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
-                        PerformSearch(); // Оновлюємо список результатів
+                        PerformSearch(); // Оновлюємо список результатів (якщо в нас стоїть фільтр на вільні місця)
                     }
                     else
                     {

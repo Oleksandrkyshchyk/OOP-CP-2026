@@ -1,19 +1,21 @@
 ﻿[
   {
-    "DepartureCity": "Лебедин",
-    "ArrivalCity": "Київ",
-    "DepartureTime": "2026-05-15T12:00:00",
-    "Price": 400.0,
+    "DepartureCity": "Київ",
+    "ArrivalCity": "Львів",
+    "DepartureTime": "2024-05-10T10:00:00",
     "TotalSeats": 4,
+    "Price": 500,
+    "DriverLogin": "oleksiy_p",
     "Status": "Активна",
     "Bookings": []
   },
   {
-    "DepartureCity": "Київ",
-    "ArrivalCity": "Львів",
-    "DepartureTime": "2026-05-20T08:00:00",
-    "Price": 600.0,
+    "DepartureCity": "Одеса",
+    "ArrivalCity": "Київ",
+    "DepartureTime": "2026-06-20T15:30:00",
     "TotalSeats": 3,
+    "Price": 600,
+    "DriverLogin": "oleksiy_p",
     "Status": "Активна",
     "Bookings": []
   }

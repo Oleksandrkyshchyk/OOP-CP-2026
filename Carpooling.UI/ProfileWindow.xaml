@@ -84,20 +84,29 @@
                             <TextBlock Text="{Binding Status}" Foreground="#1976D2" FontWeight="SemiBold" FontSize="13"/>
                         </Border>
 
-                        <Button x:Name="btnCancelBooking" 
-                                Content="Скасувати" 
-                                Foreground="#D63031"
-                                FontWeight="SemiBold"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Cursor="Hand"
-                                Tag="{Binding}"
-                                Click="btnCancelBooking_Click">
+                        <Button x:Name="btnCancelBooking" Content="Скасувати" Foreground="#D63031" FontWeight="SemiBold"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Tag="{Binding}" 
+                                Click="btnCancelBooking_Click" Margin="0,0,10,0">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="lstPassengerBookings">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button x:Name="btnDeleteTrip" Content="Видалити" Foreground="#D63031" FontWeight="SemiBold"
+                                Background="Transparent" BorderThickness="0" Cursor="Hand" Tag="{Binding}" 
+                                Click="btnDeleteTrip_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Name, RelativeSource={RelativeSource AncestorType=ListBox}}" Value="lstDriverTrips">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -123,31 +132,25 @@
             <StackPanel>
                 <Grid Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,15">
                     <Ellipse Fill="#E0E6ED"/>
-                    <Viewbox x:Name="iconDriver" Width="60" Height="60" Visibility="Collapsed" Stretch="Uniform">
+                    <Viewbox x:Name="iconDriver" Visibility="Collapsed" Stretch="Uniform" Margin="10,10,22,22">
                         <Path Fill="#1976D2" Data="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
                     </Viewbox>
-                    <Viewbox x:Name="iconPassenger" Width="55" Height="55" Visibility="Collapsed" Stretch="Uniform">
+                    <Viewbox x:Name="iconPassenger" Visibility="Collapsed" Stretch="Uniform" Margin="10,10,22,22">
                         <Path Fill="#1976D2" Data="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </Viewbox>
                 </Grid>
 
-                <TextBlock x:Name="txtUserFullName" Text="Прізвище Ім'я" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="#2D3436"/>
-                <TextBlock x:Name="txtUserRole" Text="Роль" FontSize="14" Foreground="#1976D2" HorizontalAlignment="Center" Margin="0,5,0,20"/>
+                <TextBlock x:Name="txtUserFullName" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="#2D3436"/>
+                <TextBlock x:Name="txtUserRole" FontSize="14" Foreground="#1976D2" HorizontalAlignment="Center" Margin="0,5,0,20"/>
 
                 <Separator Background="#F1F1F1" Margin="0,10"/>
-
                 <TextBlock Text="Логін:" FontSize="12" Foreground="#636E72" Margin="0,10,0,2"/>
-                <TextBlock x:Name="lblLogin" Text="login" FontWeight="Medium" FontSize="14"/>
-
+                <TextBlock x:Name="lblLogin" FontWeight="Medium" FontSize="14"/>
                 <TextBlock Text="Телефон:" FontSize="12" Foreground="#636E72" Margin="0,10,0,2"/>
-                <TextBlock x:Name="lblPhone" Text="+380..." FontWeight="Medium" FontSize="14"/>
+                <TextBlock x:Name="lblPhone" FontWeight="Medium" FontSize="14"/>
 
-                <Button x:Name="btnLogout" Content="Вийти з акаунту" Margin="0,30,0,10" Height="40" 
-                        Style="{StaticResource RoundButtonStyle}" Foreground="#D63031" Click="btnLogout_Click"/>
-
-                <Button x:Name="btnEditProfile" Content="Змінити персональні дані" Margin="0,0,0,10" Height="40" 
-                        Style="{StaticResource RoundButtonStyle}" Click="btnEditProfile_Click"/>
-
+                <Button x:Name="btnLogout" Content="Вийти з акаунту" Margin="0,30,0,10" Height="40" Style="{StaticResource RoundButtonStyle}" Foreground="#D63031" Click="btnLogout_Click"/>
+                <Button x:Name="btnEditProfile" Content="Змінити дані" Margin="0,0,0,10" Height="40" Style="{StaticResource RoundButtonStyle}" Click="btnEditProfile_Click"/>
                 <Button x:Name="btnBack" Content="Назад на головну" Style="{StaticResource LinkButtonStyle}" Click="btnBack_Click" Margin="0,5,0,0"/>
             </StackPanel>
         </Border>
@@ -162,54 +165,40 @@
                             <ColumnDefinition Width="1.5*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
                         <StackPanel Margin="0,0,15,0">
                             <TextBlock Text="Марка та модель авто" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
                             <TextBox x:Name="txtCarModel" Height="40" VerticalContentAlignment="Center" Padding="10,0"/>
                         </StackPanel>
-
                         <StackPanel Grid.Column="1" Margin="0,0,15,0">
                             <TextBlock Text="Державний номер" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
                             <TextBox x:Name="txtCarNumber" Height="40" VerticalContentAlignment="Center" Padding="10,0"/>
                         </StackPanel>
-
-                        <Button Grid.Column="2" Content="Зберегти дані" VerticalAlignment="Bottom" 
-                                Height="40" MinWidth="140" Padding="15,0" 
-                                Background="#28A745" Foreground="White" FontWeight="Bold"
-                                Style="{StaticResource RoundButtonStyle}" Click="btnSaveCar_Click"/>
+                        <Button Grid.Column="2" Content="Зберегти" VerticalAlignment="Bottom" Height="40" MinWidth="100" Background="#28A745" Foreground="White" Style="{StaticResource RoundButtonStyle}" Click="btnSaveCar_Click"/>
                     </Grid>
                 </Border>
-
-                <TextBlock Text="Мої оголошення про поїздки" FontSize="18" FontWeight="SemiBold" Margin="0,30,0,15" Foreground="#2D3436"/>
-                <ListBox x:Name="lstDriverTrips" Height="350" Background="Transparent" BorderThickness="0" 
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         HorizontalContentAlignment="Stretch"
-                         ItemTemplate="{StaticResource TripItemTemplate}"/>
+                <TextBlock Text="Мої оголошення" FontSize="18" FontWeight="SemiBold" Margin="0,30,0,15" Foreground="#2D3436"/>
+                <TextBlock x:Name="txtEmptyDriver" Text="У вас поки немає створених поїздок" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,20" Foreground="Gray"/>
+                <ListBox x:Name="lstDriverTrips" Height="350" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource TripItemTemplate}"/>
             </StackPanel>
 
             <StackPanel x:Name="panelPassenger" Visibility="Collapsed">
                 <TextBlock Text="Історія моїх бронювань" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20" Foreground="#2D3436"/>
-                <ListBox x:Name="lstPassengerBookings" Height="500" Background="Transparent" BorderThickness="0" 
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         HorizontalContentAlignment="Stretch"
-                         ItemTemplate="{StaticResource TripItemTemplate}"/>
+                <TextBlock x:Name="txtEmptyPassenger" Text="У вас поки немає активних бронювань" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,50" Foreground="Gray"/>
+                <ListBox x:Name="lstPassengerBookings" Height="500" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource TripItemTemplate}"/>
             </StackPanel>
 
             <StackPanel x:Name="panelEditProfile" Visibility="Collapsed">
-                <TextBlock Text="Редагування персональних даних" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                <TextBlock Text="Редагування профілю" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,20"/>
                 <Border Background="White" CornerRadius="15" Padding="25">
                     <StackPanel>
-                        <TextBlock Text="Прізвище та Ім'я" Margin="0,0,0,5" Foreground="Gray"/>
-                        <TextBox x:Name="editFullName" Height="40" Margin="0,0,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
-
-                        <TextBlock Text="Телефон" Margin="0,0,0,5" Foreground="Gray"/>
-                        <TextBox x:Name="editPhone" Height="40" Margin="0,0,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
-
-                        <TextBlock Text="Новий пароль" Margin="0,0,0,5" Foreground="Gray"/>
-                        <PasswordBox x:Name="editPassword" Height="40" Margin="0,0,0,25" VerticalContentAlignment="Center" Padding="10,0"/>
-
+                        <TextBlock Text="Прізвище та Ім'я" Foreground="Gray"/>
+                        <TextBox x:Name="editFullName" Height="40" Margin="0,5,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
+                        <TextBlock Text="Телефон" Foreground="Gray"/>
+                        <TextBox x:Name="editPhone" Height="40" Margin="0,5,0,15" VerticalContentAlignment="Center" Padding="10,0"/>
+                        <TextBlock Text="Новий пароль (залиште порожнім, щоб не змінювати)" Foreground="Gray"/>
+                        <PasswordBox x:Name="editPassword" Height="40" Margin="0,5,0,25" VerticalContentAlignment="Center" Padding="10,0"/>
                         <UniformGrid Columns="2">
-                            <Button Content="Зберегти" Click="btnSaveProfile_Click" Background="#28A745" Foreground="White" Height="45" Margin="0,0,10,0" Style="{StaticResource RoundButtonStyle}" FontWeight="Bold"/>
+                            <Button Content="Зберегти" Click="btnSaveProfile_Click" Background="#28A745" Foreground="White" Height="45" Margin="0,0,10,0" Style="{StaticResource RoundButtonStyle}"/>
                             <Button Content="Скасувати" Click="btnCancelEdit_Click" Height="45" Style="{StaticResource RoundButtonStyle}"/>
                         </UniformGrid>
                     </StackPanel>

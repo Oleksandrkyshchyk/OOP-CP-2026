@@ -6,7 +6,6 @@ using Carpooling.Core.Models;
 using Carpooling.Core.Managers;
 using Carpooling.Core.Services;
 using Carpooling.Core.Validators;
-using System.Windows.Controls;
 
 namespace Carpooling.UI
 {
@@ -32,77 +31,119 @@ namespace Carpooling.UI
 
         private void LoadUserData()
         {
-            // Оновлюємо текстові поля профілю зліва
             txtUserFullName.Text = _currentUser.FullName;
             txtUserRole.Text = _currentUser.Role;
             lblLogin.Text = _currentUser.Login;
             lblPhone.Text = _currentUser.Phone;
 
-            // Скидаємо видимість іконок та панелей перед перевіркою
             iconDriver.Visibility = Visibility.Collapsed;
             iconPassenger.Visibility = Visibility.Collapsed;
             panelDriver.Visibility = Visibility.Collapsed;
             panelPassenger.Visibility = Visibility.Collapsed;
+            txtEmptyDriver.Visibility = Visibility.Collapsed;
+            txtEmptyPassenger.Visibility = Visibility.Collapsed;
 
-            // Логіка для Водія
             if (_currentUser.Role == "Водій")
             {
                 iconDriver.Visibility = Visibility.Visible;
                 panelDriver.Visibility = Visibility.Visible;
 
-                // Заповнення полів авто (якщо дані є)
                 if (_currentUser is Driver driver)
                 {
                     txtCarModel.Text = driver.CarModel;
                     txtCarNumber.Text = driver.LicensePlate;
                 }
 
-                // Завантажуємо поїздки, де цей користувач є водієм
-                lstDriverTrips.ItemsSource = _tripManager.GetAllTrips()
+                var driverTrips = _tripManager.GetAllTrips()
                     .Where(t => t.DriverLogin == _currentUser.Login)
                     .ToList();
+
+                lstDriverTrips.ItemsSource = driverTrips;
+                if (driverTrips.Count == 0) txtEmptyDriver.Visibility = Visibility.Visible;
             }
-            // Логіка для Пасажира
             else if (_currentUser.Role == "Пасажир")
             {
                 iconPassenger.Visibility = Visibility.Visible;
                 panelPassenger.Visibility = Visibility.Visible;
 
-                // Шукаємо поїздки, у яких в списку бронювань є логін пасажира
-                lstPassengerBookings.ItemsSource = _tripManager.GetAllTrips()
+                var bookings = _tripManager.GetAllTrips()
                     .Where(t => t.Bookings != null &&
-                                t.Bookings.Any(b => b.Passenger != null && b.Passenger.Login == _currentUser.Login))
+                                t.Bookings.Any(b => b.Passenger?.Login == _currentUser.Login))
                     .ToList();
+
+                lstPassengerBookings.ItemsSource = bookings;
+                if (bookings.Count == 0) txtEmptyPassenger.Visibility = Visibility.Visible;
             }
+        }
+
+        private void btnCancelBooking_Click(object sender, RoutedEventArgs e)
+        {
+            var trip = (sender as FrameworkElement)?.Tag as Trip;
+            if (trip == null) return;
+
+            if (MessageBox.Show("Скасувати це бронювання?", "Підтвердження", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                var booking = trip.Bookings.FirstOrDefault(b => b.Passenger?.Login == _currentUser.Login);
+                if (booking != null)
+                {
+                    trip.Bookings.Remove(booking);
+                    if (_tripManager.UpdateTrip(trip))
+                    {
+                        MessageBox.Show("Бронювання скасовано.");
+                        LoadUserData();
+                    }
+                }
+            }
+        }
+
+        private void btnDeleteTrip_Click(object sender, RoutedEventArgs e)
+        {
+            var trip = (sender as FrameworkElement)?.Tag as Trip;
+            if (trip == null) return;
+
+            if (trip.DepartureTime < DateTime.Now)
+            {
+                MessageBox.Show("Неможливо видалити поїздку з минулого. Вона вже в історії.", "Обмеження");
+                return;
+            }
+
+            if (MessageBox.Show("Видалити цю поїздку?", "Увага", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                _tripManager.GetAllTrips().Remove(trip);
+                if (_tripManager.SaveChanges())
+                {
+                    MessageBox.Show("Поїздку видалено.");
+                    LoadUserData();
+                }
+            }
+        }
+
+        // --- Методи для редагування ---
+        private void btnEditProfile_Click(object sender, RoutedEventArgs e)
+        {
+            panelDriver.Visibility = Visibility.Collapsed;
+            panelPassenger.Visibility = Visibility.Collapsed;
+            panelEditProfile.Visibility = Visibility.Visible;
+            editFullName.Text = _currentUser.FullName;
+            editPhone.Text = _currentUser.Phone;
         }
 
         private void btnSaveProfile_Click(object sender, RoutedEventArgs e)
         {
-            string name = editFullName.Text.Trim();
-            string phone = editPhone.Text.Trim();
-            string pass = editPassword.Password;
+            if (!UserValidator.IsValidFullName(editFullName.Text)) { MessageBox.Show("Некоректне ім'я!"); return; }
 
-            if (!UserValidator.IsValidFullName(name)) { MessageBox.Show("Некоректне ім'я!"); return; }
-            if (!UserValidator.IsValidPhone(phone)) { MessageBox.Show("Некоректний телефон!"); return; }
-            if (!string.IsNullOrWhiteSpace(pass) && !UserValidator.IsValidPassword(pass)) { MessageBox.Show("Слабкий пароль!"); return; }
-
-            var allUsers = _userManager.GetAllUsers();
-            var userInDb = allUsers.FirstOrDefault(u => u.Login == _currentUser.Login);
-
+            var userInDb = _userManager.GetAllUsers().FirstOrDefault(u => u.Login == _currentUser.Login);
             if (userInDb != null)
             {
-                userInDb.FullName = name;
-                userInDb.Phone = phone;
-                if (!string.IsNullOrWhiteSpace(pass)) userInDb.Password = pass;
+                userInDb.FullName = editFullName.Text;
+                userInDb.Phone = editPhone.Text;
+                if (!string.IsNullOrWhiteSpace(editPassword.Password)) userInDb.Password = editPassword.Password;
 
                 _userManager.SaveChanges();
+                _currentUser.FullName = userInDb.FullName;
+                _currentUser.Phone = userInDb.Phone;
 
-                _currentUser.FullName = name;
-                _currentUser.Phone = phone;
-
-                if (_mainWindow != null) _mainWindow.UpdateUI();
-
-                MessageBox.Show("Профіль оновлено!");
+                _mainWindow?.UpdateUI();
                 ExitEditMode();
             }
         }
@@ -111,107 +152,22 @@ namespace Carpooling.UI
         {
             if (_currentUser is Driver driver)
             {
-                var allUsers = _userManager.GetAllUsers();
-                var driverInDb = allUsers.FirstOrDefault(u => u.Login == driver.Login) as Driver;
-
+                var driverInDb = _userManager.GetAllUsers().FirstOrDefault(u => u.Login == driver.Login) as Driver;
                 if (driverInDb != null)
                 {
-                    driverInDb.CarModel = txtCarModel.Text.Trim();
-                    driverInDb.LicensePlate = txtCarNumber.Text.Trim();
+                    driverInDb.CarModel = txtCarModel.Text;
+                    driverInDb.LicensePlate = txtCarNumber.Text;
                     _userManager.SaveChanges();
-
                     driver.CarModel = driverInDb.CarModel;
                     driver.LicensePlate = driverInDb.LicensePlate;
-
                     MessageBox.Show("Дані авто збережено!");
                 }
             }
         }
 
-        private void btnEditProfile_Click(object sender, RoutedEventArgs e)
-        {
-            panelDriver.Visibility = Visibility.Collapsed;
-            panelPassenger.Visibility = Visibility.Collapsed;
-            panelEditProfile.Visibility = Visibility.Visible;
-
-            editFullName.Text = _currentUser.FullName;
-            editPhone.Text = _currentUser.Phone;
-            editPassword.Password = "";
-        }
-
         private void btnCancelEdit_Click(object sender, RoutedEventArgs e) => ExitEditMode();
-
-        private void ExitEditMode()
-        {
-            panelEditProfile.Visibility = Visibility.Collapsed;
-            LoadUserData();
-        }
-
-        private void btnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Ви дійсно бажаєте вийти з акаунту?", "Вихід", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                MainWindow loginEntry = new MainWindow(null);
-                loginEntry.Show();
-
-                foreach (Window window in Application.Current.Windows)
-                {
-                    if (window != loginEntry)
-                        window.Close();
-                }
-            }
-        }
-
-        private void btnBack_Click(object sender, RoutedEventArgs e)
-        {
-            if (_mainWindow != null)
-            {
-                _mainWindow.Show();
-                _mainWindow.Focus();
-
-                if (_mainWindow is MainWindow main)
-                {
-                    main.UpdateUI();
-                }
-            }
-            this.Close();
-        }
-
-        private void btnCancelBooking_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            // Отримуємо об'єкт поїздки прямо з Tag, якщо в XAML ми прив'язали саму поїздку
-            var trip = button?.Tag as Trip;
-
-            if (trip == null) return;
-
-            var result = MessageBox.Show("Ви впевнені, що хочете скасувати це бронювання?",
-                                         "Підтвердження", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                // 1. Шукаємо бронювання саме цього користувача в цій поїздці
-                var bookingToRemove = trip.Bookings?.FirstOrDefault(b => b.Passenger != null && b.Passenger.Login == _currentUser.Login);
-
-                if (bookingToRemove != null)
-                {
-                    // 2. Видаляємо бронювання
-                    trip.Bookings.Remove(bookingToRemove);
-
-                    // 3. Оновлюємо дані в JSON через менеджер
-                    if (_tripManager.UpdateTrip(trip))
-                    {
-                        MessageBox.Show("Бронювання успішно скасовано!", "Успіх", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                        // 4. Перезавантажуємо дані, щоб поїздка зникла зі списку
-                        LoadUserData();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Помилка при збереженні змін у базі даних.");
-                    }
-                }
-            }
-        }
+        private void ExitEditMode() { panelEditProfile.Visibility = Visibility.Collapsed; LoadUserData(); }
+        private void btnBack_Click(object sender, RoutedEventArgs e) { _mainWindow?.Show(); this.Close(); }
+        private void btnLogout_Click(object sender, RoutedEventArgs e) { new MainWindow(null).Show(); this.Close(); }
     }
 }
