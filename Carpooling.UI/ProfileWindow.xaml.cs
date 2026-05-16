@@ -12,15 +12,15 @@ namespace Carpooling.UI
     public partial class ProfileWindow : Window
     {
         private User _currentUser;
-        private MainWindow _mainWindow;
         private UserManager _userManager;
         private TripManager _tripManager;
+        private Window _previousWindow;
 
-        public ProfileWindow(User user, Window mainWindow)
+        public ProfileWindow(User user, Window previousWindow)
         {
             InitializeComponent();
             _currentUser = user;
-            _mainWindow = mainWindow as MainWindow;
+            _previousWindow = previousWindow;
 
             var storage = new JsonDataStorage();
             _userManager = new UserManager(storage);
@@ -130,20 +130,52 @@ namespace Carpooling.UI
 
         private void btnSaveProfile_Click(object sender, RoutedEventArgs e)
         {
-            if (!UserValidator.IsValidFullName(editFullName.Text)) { MessageBox.Show("Некоректне ім'я!"); return; }
+            if (!UserValidator.IsValidFullName(editFullName.Text))
+            {
+                MessageBox.Show("Некоректне ім'я!");
+                return;
+            }
 
-            var userInDb = _userManager.GetAllUsers().FirstOrDefault(u => u.Login == _currentUser.Login);
+            if (!UserValidator.IsValidPhone(editPhone.Text))
+            {
+                MessageBox.Show("Некоректний номер телефону!");
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(editPassword.Password))
+            {
+                if (!UserValidator.IsValidPassword(editPassword.Password))
+                {
+                    MessageBox.Show(
+                        "Пароль повинен містити мінімум 8 символів, одну велику літеру та цифру!"
+                    );
+                    return;
+                }
+            }
+
+            var userInDb = _userManager.GetAllUsers()
+                .FirstOrDefault(u => u.Login == _currentUser.Login);
+
             if (userInDb != null)
             {
                 userInDb.FullName = editFullName.Text;
                 userInDb.Phone = editPhone.Text;
-                if (!string.IsNullOrWhiteSpace(editPassword.Password)) userInDb.Password = editPassword.Password;
+
+                if (!string.IsNullOrWhiteSpace(editPassword.Password))
+                {
+                    userInDb.Password = editPassword.Password;
+                }
 
                 _userManager.SaveChanges();
+
                 _currentUser.FullName = userInDb.FullName;
                 _currentUser.Phone = userInDb.Phone;
 
-                _mainWindow?.UpdateUI();
+                if (_previousWindow is MainWindow mainWindow)
+                {
+                    mainWindow.UpdateUI();
+                }
+
                 ExitEditMode();
             }
         }
@@ -167,7 +199,7 @@ namespace Carpooling.UI
 
         private void btnCancelEdit_Click(object sender, RoutedEventArgs e) => ExitEditMode();
         private void ExitEditMode() { panelEditProfile.Visibility = Visibility.Collapsed; LoadUserData(); }
-        private void btnBack_Click(object sender, RoutedEventArgs e) { _mainWindow?.Show(); this.Close(); }
+        private void btnBack_Click(object sender, RoutedEventArgs e) { _previousWindow?.Show(); this.Close(); }
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
             MainWindow login = new MainWindow(null);

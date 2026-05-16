@@ -35,7 +35,7 @@
     "$type": "passenger",
     "Login": "pass2",
     "Password": "Pass1234",
-    "FullName": "Герман Мельник",
+    "FullName": "Михайло Мельник",
     "Phone": "+380666666666",
     "Role": "Пасажир",
     "Bookings": [],
